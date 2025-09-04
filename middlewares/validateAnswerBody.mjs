@@ -6,6 +6,11 @@ export const validateAnswerBody = (req, res, next) => {
             message: "Invalid request data.",
         });
     }
+    if (req.body.content.length > 300) {
+        return res.status(400).json({
+            message: "Answers must be a message of no more than 300 characters.",
+        });
+    }
 
     res.locals.content = content;
     next();

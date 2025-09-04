@@ -191,18 +191,63 @@ questionsRouter.put("/:questionId",
               description = $3,
               category = $4
           WHERE id = $1
-          RETURENING *
+          RETURNING *
         `,
         [questionId, title, description, category]
       );
 
-      return res.status(201).json({
+      return res.status(200).json({
         message: "Question updated successfully.",
       });
 
     } catch (error) {
       return res.status(500).json({
         message: `Unable to fetch questions. Error: ${error.message}`,
+      });
+    }
+  });
+
+questionsRouter.delete("/:questionId",
+  [ensureQuestionExists], async (req, res) => {
+    try {
+      const { questionId } = res.locals;
+
+      await connectionPool.query(`DELETE FROM answer_votes av USING answers a WHERE av.answer_id = $1`, [questionId]);
+      await connectionPool.query(`DELETE FROM answers WHERE question_id = $1`, [questionId]);
+      await connectionPool.query(`DELETE FROM question_votes WHERE question_id = $1`, [questionId]);
+      await connectionPool.query(`DELETE FROM questions WHERE id = $1`, [questionId]);
+
+      return res.status(200).json({
+        message: "Question post has been deleted successfully.",
+      });
+
+    } catch (error) {
+      return res.status(500).json({
+        message: `Unable to delete question. Error: ${error.message}`,
+      });
+    }
+  })
+
+questionsRouter.delete("/:questionId/answers",
+  [ensureQuestionExists], async (req, res) => {
+    try {
+      const { questionId } = res.locals;
+
+      await connectionPool.query(
+        `
+          DELETE FROM answers
+          WHERE question_id = $1
+        `,
+        [questionId]
+      );
+
+      return res.status(200).json({
+        message: "All answers for the question have been deleted successfully.",
+      });
+
+    } catch (error) {
+      return res.status(500).json({
+        message: `Unable to delete answers. Error: ${error.message}`,
       });
     }
   })
