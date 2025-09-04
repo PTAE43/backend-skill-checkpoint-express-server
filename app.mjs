@@ -9,6 +9,14 @@ app.get("/test", (req, res) => {
   return res.json("Server API is working 🚀");
 });
 
+app.get("/questions", (req, res) => {
+  try{
+
+  }catch(error){
+    console.error("")
+  }
+})
+
 app.listen(port, () => {
   console.log(`Server is running at ${port}`);
 });
