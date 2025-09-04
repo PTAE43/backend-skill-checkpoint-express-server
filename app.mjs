@@ -1,9 +1,13 @@
 import express from "express";
+import questionsRouter from "./routes/questions.mjs";
+import answersVoteRouter from "./routes/answersVote.mjs";
 
 const app = express();
 const port = 4000;
 
 app.use(express.json());
+app.use('/questions', questionsRouter);
+app.use('/answers', answersVoteRouter);
 
 app.get("/test", (req, res) => {
   return res.json("Server API is working 🚀");
