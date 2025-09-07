@@ -211,7 +211,7 @@ questionsRouter.delete("/:questionId",
   [ensureQuestionExists], async (req, res) => {
     try {
       const { questionId } = res.locals;
-
+      //จริงๆแก้ใน Postgres ได้เลย จะง่ายกว่าครับ.
       await connectionPool.query(`DELETE FROM answer_votes av USING answers a WHERE av.answer_id = $1`, [questionId]);
       await connectionPool.query(`DELETE FROM answers WHERE question_id = $1`, [questionId]);
       await connectionPool.query(`DELETE FROM question_votes WHERE question_id = $1`, [questionId]);
