@@ -4,7 +4,7 @@ const { Pool } = pg.default;
 
 const connectionPool = new Pool({
   connectionString:
-    "postgresql://postgres:Aa123456@localhost:5432/quora-mock",
+    "postgresql://postgres:********@localhost:5432/quora-mock",
 });
 
 export default connectionPool;
